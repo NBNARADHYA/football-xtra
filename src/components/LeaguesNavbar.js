@@ -7,7 +7,7 @@ class LeagueNavbar extends React.Component {
         const leagueNav = leagues.map((league, leagueIdx) => {
             return (
                 <Nav.Link key={leagueIdx} eventKey={leagueIdx}>
-                    <img src={league.logo} height="40" alt="alt" />
+                    <img src={league.logo} height="40" alt={league.name} />
                 </Nav.Link>
             );
         });

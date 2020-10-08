@@ -1,7 +1,8 @@
 import React from 'react';
-import LeagueNavbar from './components/LeagueNavbar';
+import LeaguesNavbar from './components/LeaguesNavbar';
 import League from './components/League';
-import { Nav } from 'react-bootstrap';
+import ViewsNavbar from './components/ViewsNavbar';
+import { views as viewsArr } from './static/views';
 
 class App extends React.Component {
 
@@ -9,32 +10,30 @@ class App extends React.Component {
     super(props);
     this.state = {
       currLeagueIdx: 0,
-      leagueView: "table"
+      views: Array(viewsArr.length).fill("table")
     };
   }
 
-  changeLeagueView(view) {
-      this.setState({
-          leagueView: view
-      });
+  changeViews(view) {
+    let temp = this.state.views.slice();
+    temp[this.state.currLeagueIdx] = view;
+    this.setState({
+        views: temp
+    });
   }
 
   changeLeague(idx) {
     this.setState({
-      currLeagueIdx: idx,
-      leagueView: "table"
+      currLeagueIdx: idx
     });
   }
 
   render() {
     return (
       <div>
-        <LeagueNavbar changeLeague={idx => this.changeLeague(idx)} />
-        <Nav variant="tabs" activeKey={this.state.leagueView} onSelect={key => this.changeLeagueView(key)}>
-            <Nav.Link eventKey="table">Standings</Nav.Link>
-            <Nav.Link eventKey="top-scorers">Top Scorers</Nav.Link>
-        </Nav>
-        <League leagueIdx={this.state.currLeagueIdx} view={this.state.leagueView} />
+        <LeaguesNavbar changeLeague={idx => this.changeLeague(idx)} />
+        <ViewsNavbar changeLeagueView={view => this.changeViews(view)} view={this.state.views[this.state.currLeagueIdx]} />
+        <League leagueIdx={this.state.currLeagueIdx} view={this.state.views[this.state.currLeagueIdx]} />
       </div>
     );
   }
