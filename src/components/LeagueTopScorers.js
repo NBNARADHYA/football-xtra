@@ -1,10 +1,11 @@
 import React from 'react';
+import { leagues } from '../static/leagues';
 
 class LeagueTopScorers extends React.Component {
     render() {
         return (
             <div>
-                {this.props.league.name} {' '} Top Scorers
+                {leagues[this.props.leagueIdx].name} {' '} Top Scorers
             </div>
         );
     }

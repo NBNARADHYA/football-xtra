@@ -1,5 +1,4 @@
 import React from 'react';
-import { leagues } from '../static/leagues';
 import LeagueTable from '../components/LeagueTable';
 import LeagueTopScorers from '../components/LeagueTopScorers';
 
@@ -10,10 +9,10 @@ class League extends React.Component {
         let navContent;
 
         if(this.props.view === "table") {
-            navContent = <LeagueTable league={leagues[this.props.leagueIdx]} />
+            navContent = <LeagueTable leagueIdx={this.props.leagueIdx} populateTables={this.props.populateTables} tableData={this.props.tableData} />
         }
         else {
-            navContent = <LeagueTopScorers league={leagues[this.props.leagueIdx]} />
+            navContent = <LeagueTopScorers leagueIdx={this.props.leagueIdx} />
         }
 
         return (
