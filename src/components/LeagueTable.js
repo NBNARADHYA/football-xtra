@@ -29,9 +29,13 @@ class LeagueTable extends React.Component {
 
     render() {
         if(this.props.view !== "table") return null;
-        const { error, isLoaded, table } = this.props.tableData;
 
-        if(error || !isLoaded) {
+        const { error, isLoaded, table } = this.props.tableData;
+        const style1 = { position: "fixed", top: "50%", left: "50%" };
+
+        if(error) return <div style={style1}>Sorry, Unable to fetch the standings</div>
+
+        if(!isLoaded) {
             this.getTableData(this.props.leagueIdx);
             const style = { position: "fixed", top: "40%", left: "37%" };
             return <img style={style} src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading..." />;
