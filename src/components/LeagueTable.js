@@ -1,13 +1,12 @@
 import React from 'react';
-import { Spinner, Table } from 'react-bootstrap';
-import axios from 'axios';
+import { Table } from 'react-bootstrap';
 import { leagues } from '../static/leagues';
+import axios from 'axios';
 
 class LeagueTable extends React.Component {
 
-    componentDidMount() {
-        console.log("h");
-        axios.get(`https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=${leagues[this.props.leagueIdx].id}&s=2020-2021`)
+    getTableData(idx) {
+        axios.get(`https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=${leagues[idx].id}&s=2020-2021`)
         .then(
             res => {
                 this.props.populateTables({
@@ -15,7 +14,7 @@ class LeagueTable extends React.Component {
                     table: res.data.table,
                     error: null
                 },
-                this.props.leagueIdx);
+                idx);
             },
             error => {
                 this.props.populateTables({
@@ -23,21 +22,21 @@ class LeagueTable extends React.Component {
                     isLoaded: false,
                     table: []
                 },
-                this.props.leagueIdx);
+                idx);
             }
         );
     }
 
-
-
     render() {
+        if(this.props.view !== "table") return null;
         const { error, isLoaded, table } = this.props.tableData;
+
         if(error || !isLoaded) {
-            const style = { position: "fixed", top: "50%", left: "50%" };
-            return (
-                <Spinner style={style} animation="grow" />
-            );
+            this.getTableData(this.props.leagueIdx);
+            const style = { position: "fixed", top: "40%", left: "37%" };
+            return <img style={style} src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading..." />;
         }
+
         const standings = table.map((club, pos) => {
             return (
                 <tr key={pos}>
