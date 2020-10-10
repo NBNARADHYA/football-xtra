@@ -6,6 +6,10 @@ export const views = [
     {
         key: "top-scorers",
         name: "Top Scorers"
+    },
+    {
+        key: "matches",
+        name: "Matches"
     }
 
 ];

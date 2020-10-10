@@ -1,6 +1,7 @@
 import React from 'react';
 import LeagueTable from '../components/LeagueTable';
 import LeagueTopScorers from '../components/LeagueTopScorers';
+import LeagueMatches from '../components/LeagueMatches';
 import { leagues } from '../static/leagues';
 
 class League extends React.Component {
@@ -12,6 +13,11 @@ class League extends React.Component {
                 isLoaded: false,
                 error: null,
                 table: []
+            })),
+            matchUps: Array(leagues.length).fill(0).map(() => ({
+                isLoaded: false,
+                error: null,
+                matches: []
             }))
         };
     }
@@ -21,6 +27,14 @@ class League extends React.Component {
             let newTables = prevState.tables.slice();
             newTables[idx] = data;
             return { tables: newTables };
+        });
+    }
+
+    populateMatchUps(data, idx) {
+        this.setState(prevState => {
+            let newMatchUps = prevState.matchUps.slice();
+            newMatchUps[idx] = data;
+            return { matchUps: newMatchUps };
         });
     }
 
@@ -34,6 +48,12 @@ class League extends React.Component {
                     populateTables={(data, idx) => this.populateTables(data, idx)}
                 />
                 <LeagueTopScorers leagueIdx={this.props.leagueIdx} view={this.props.view} />
+                <LeagueMatches 
+                    matchUps={this.state.matchUps[this.props.leagueIdx]}
+                    view={this.props.view}
+                    leagueIdx={this.props.leagueIdx}
+                    populateMatchUps={(data, idx) => this.populateMatchUps(data, idx)}
+                />
             </div>
         );
     }

@@ -33,7 +33,7 @@ class LeagueTable extends React.Component {
         const { error, isLoaded, table } = this.props.tableData;
         const style1 = { position: "fixed", top: "50%", left: "50%" };
 
-        if(error) return <div style={style1}>Sorry, Unable to fetch the standings</div>
+        if(error) return <div style={style1}>Sorry, Unable to fetch the standings</div>;
 
         if(!isLoaded) {
             this.getTableData(this.props.leagueIdx);
