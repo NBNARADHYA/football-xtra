@@ -2,30 +2,34 @@ import React from 'react';
 import LeagueTable from '../components/LeagueTable';
 import LeagueTopScorers from '../components/LeagueTopScorers';
 import LeagueMatches from '../components/LeagueMatches';
+import ViewsNavbar from '../components/ViewsNavbar';
 import { leagues } from '../static/leagues';
+import { seasons, seasonIdx } from '../static/seasons';
 
 class League extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            tables: Array(leagues.length).fill(0).map(() => ({
+            tables: Array(leagues.length).fill(0).map(() => Array(seasons.length).fill(0).map(() => ({
                 isLoaded: false,
                 error: null,
                 table: []
-            })),
+            }))),
             matchUps: Array(leagues.length).fill(0).map(() => ({
                 isLoaded: false,
                 error: null,
                 matches: []
-            }))
+            })),
+            views: Array(leagues.length).fill("table"),
+            seasons: Array(leagues.length).fill("2020-2021")
         };
     }
 
-    populateTables(data, idx) {
+    populateTables(data, idx, season) {
         this.setState(prevState => {
             let newTables = prevState.tables.slice();
-            newTables[idx] = data;
+            newTables[idx][seasonIdx[season]] = data;
             return { tables: newTables };
         });
     }
@@ -38,20 +42,49 @@ class League extends React.Component {
         });
     }
 
+    changeView(view, idx) {
+        this.setState(prevState => {
+            let newViews = prevState.views.slice();
+            newViews[idx] = view;
+            return ({
+                views: newViews
+            });
+        });
+    }
+
+    changeSeason(season, idx) {
+        this.setState(prevState => {
+            let newSeasons = prevState.seasons.slice();
+            newSeasons[idx] = season;
+            return { seasons: newSeasons };
+        });
+    }
+
     render() {
+        const { leagueIdx } = this.props;
+        const view = this.state.views[leagueIdx];
+        const season = this.state.seasons[this.props.leagueIdx];
         return (
             <div>
-                <LeagueTable
-                    tableData={this.state.tables[this.props.leagueIdx]}
-                    view={this.props.view}
-                    leagueIdx={this.props.leagueIdx}
-                    populateTables={(data, idx) => this.populateTables(data, idx)}
+                <ViewsNavbar
+                    changeLeagueView={(view, idx) => this.changeView(view, idx)}
+                    view={view}
+                    leagueIdx={leagueIdx}
+                    season={season}
+                    changeSeason={(season, idx) => this.changeSeason(season, idx)}
                 />
-                <LeagueTopScorers leagueIdx={this.props.leagueIdx} view={this.props.view} />
+                <LeagueTable
+                    tableData={this.state.tables[leagueIdx][seasonIdx[season]]}
+                    view={view}
+                    leagueIdx={leagueIdx}
+                    populateTables={(data, idx, season) => this.populateTables(data, idx, season)}
+                    season={season}
+                />
+                <LeagueTopScorers leagueIdx={leagueIdx} view={view} season={season} />
                 <LeagueMatches 
-                    matchUps={this.state.matchUps[this.props.leagueIdx]}
-                    view={this.props.view}
-                    leagueIdx={this.props.leagueIdx}
+                    matchUps={this.state.matchUps[leagueIdx]}
+                    view={view}
+                    leagueIdx={leagueIdx}
                     populateMatchUps={(data, idx) => this.populateMatchUps(data, idx)}
                 />
             </div>

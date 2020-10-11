@@ -4,9 +4,9 @@ import { leagues } from '../static/leagues';
 import axios from 'axios';
 
 class LeagueTable extends React.Component {
-
-    getTableData(idx) {
-        axios.get(`https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=${leagues[idx].id}&s=2020-2021`)
+    
+    getTableData(idx, season) {
+        axios.get(`https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=${leagues[idx].id}&s=${season}`)
         .then(
             res => {
                 this.props.populateTables({
@@ -14,7 +14,7 @@ class LeagueTable extends React.Component {
                     table: res.data.table,
                     error: null
                 },
-                idx);
+                idx, this.props.season);
             },
             error => {
                 this.props.populateTables({
@@ -22,7 +22,7 @@ class LeagueTable extends React.Component {
                     isLoaded: false,
                     table: []
                 },
-                idx);
+                idx, this.props.season);
             }
         );
     }
@@ -36,7 +36,7 @@ class LeagueTable extends React.Component {
         if(error) return <div style={style1}>Sorry, Unable to fetch the standings</div>;
 
         if(!isLoaded) {
-            this.getTableData(this.props.leagueIdx);
+            this.getTableData(this.props.leagueIdx, this.props.season);
             const style = { position: "fixed", top: "40%", left: "37%" };
             return <img style={style} src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading..." />;
         }

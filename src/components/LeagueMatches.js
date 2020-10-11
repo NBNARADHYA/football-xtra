@@ -51,7 +51,7 @@ class LeagueMatches extends React.Component {
             return (
                 <Card key={index} border="secondary" className="text-center ">
                     <Card.Header>Matchday {match.intRound}</Card.Header>
-                    <Card.Body><Card.Text>{match.strHomeTeam}{" vs "}{match.strAwayTeam}</Card.Text></Card.Body>
+                    <Card.Body><Card.Text>{match.strHomeTeam} vs {match.strAwayTeam}</Card.Text></Card.Body>
                     <Card.Footer>{this.getDate(match.strTimestamp)}</Card.Footer>
                 </Card>
             );

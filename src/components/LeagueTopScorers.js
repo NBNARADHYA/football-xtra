@@ -7,7 +7,7 @@ class LeagueTopScorers extends React.Component {
         if(this.props.view !== "top-scorers")   return null;
         return (
             <div>
-                {leagues[this.props.leagueIdx].name} {' '} Top Scorers
+                {leagues[this.props.leagueIdx].name} Top Scorers, Season: {this.props.season} 
             </div>
         );
     }
