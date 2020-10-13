@@ -58,7 +58,7 @@ class LeagueTable extends React.Component {
             );
         });
         return (
-            <Table striped bordered hover variant="dark">
+            <Table className="mb-0" striped bordered hover variant="dark">
                 <thead>
                     <tr>
                         <th>#</th>
