@@ -1,44 +1,59 @@
-import React from 'react';
-import { Table } from 'react-bootstrap';
-import { leagues } from '../static/leagues';
-import axios from 'axios';
+import React from "react";
+import { Table } from "react-bootstrap";
+import { leagues } from "../static/leagues";
+import axios from "axios";
 
 class LeagueTable extends React.Component {
-    
     getTableData(idx, season) {
-        axios.get(`https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=${leagues[idx].id}&s=${season}`)
-        .then(
-            res => {
-                this.props.populateTables({
-                    isLoaded: true,
-                    table: res.data.table,
-                    error: null
+        axios
+            .get(
+                `https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=${leagues[idx].id}&s=${season}`
+            )
+            .then(
+                (res) => {
+                    this.props.populateTables(
+                        {
+                            isLoaded: true,
+                            table: res.data.table,
+                            error: null,
+                        },
+                        idx,
+                        this.props.season
+                    );
                 },
-                idx, this.props.season);
-            },
-            error => {
-                this.props.populateTables({
-                    error,
-                    isLoaded: false,
-                    table: []
-                },
-                idx, this.props.season);
-            }
-        );
+                (error) => {
+                    this.props.populateTables(
+                        {
+                            error,
+                            isLoaded: false,
+                            table: [],
+                        },
+                        idx,
+                        this.props.season
+                    );
+                }
+            );
     }
 
     render() {
-        if(this.props.view !== "table") return null;
-
         const { error, isLoaded, table } = this.props.tableData;
         const style1 = { position: "fixed", top: "50%", left: "50%" };
 
-        if(error) return <div style={style1}>Sorry, Unable to fetch the standings</div>;
+        if (error)
+            return (
+                <div style={style1}>Sorry, Unable to fetch the standings</div>
+            );
 
-        if(!isLoaded) {
+        if (!isLoaded) {
             this.getTableData(this.props.leagueIdx, this.props.season);
             const style = { position: "fixed", top: "40%", left: "37%" };
-            return <img style={style} src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading..." />;
+            return (
+                <img
+                    style={style}
+                    src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+                    alt="Loading..."
+                />
+            );
         }
 
         const standings = table.map((club, pos) => {
@@ -73,9 +88,7 @@ class LeagueTable extends React.Component {
                         <th>Points</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {standings}
-                </tbody>
+                <tbody>{standings}</tbody>
             </Table>
         );
     }

@@ -1,33 +1,40 @@
-import React from 'react';
-import LeagueTable from '../components/LeagueTable';
-import LeagueTopScorers from '../components/LeagueTopScorers';
-import LeagueMatches from '../components/LeagueMatches';
-import ViewsNavbar from '../components/ViewsNavbar';
-import { leagues } from '../static/leagues';
-import { seasons, seasonIdx } from '../static/seasons';
+import React from "react";
+import LeagueTable from "../components/LeagueTable";
+import LeagueTopScorers from "../components/LeagueTopScorers";
+import LeagueMatches from "../components/LeagueMatches";
+import ViewsNavbar from "../components/ViewsNavbar";
+import { leagues } from "../static/leagues";
+import { seasons, seasonIdx } from "../static/seasons";
 
 class League extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            tables: Array(leagues.length).fill(0).map(() => Array(seasons.length).fill(0).map(() => ({
-                isLoaded: false,
-                error: null,
-                table: []
-            }))),
-            matchUps: Array(leagues.length).fill(0).map(() => ({
-                isLoaded: false,
-                error: null,
-                matches: []
-            })),
+            tables: Array(leagues.length)
+                .fill(0)
+                .map(() =>
+                    Array(seasons.length)
+                        .fill(0)
+                        .map(() => ({
+                            isLoaded: false,
+                            error: null,
+                            table: [],
+                        }))
+                ),
+            matchUps: Array(leagues.length)
+                .fill(0)
+                .map(() => ({
+                    isLoaded: false,
+                    error: null,
+                    matches: [],
+                })),
             views: Array(leagues.length).fill("table"),
-            seasons: Array(leagues.length).fill("2020-2021")
+            seasons: Array(leagues.length).fill("2020-2021"),
         };
     }
 
     populateTables(data, idx, season) {
-        this.setState(prevState => {
+        this.setState((prevState) => {
             let newTables = prevState.tables.slice();
             newTables[idx][seasonIdx[season]] = data;
             return { tables: newTables };
@@ -35,7 +42,7 @@ class League extends React.Component {
     }
 
     populateMatchUps(data, idx) {
-        this.setState(prevState => {
+        this.setState((prevState) => {
             let newMatchUps = prevState.matchUps.slice();
             newMatchUps[idx] = data;
             return { matchUps: newMatchUps };
@@ -43,17 +50,17 @@ class League extends React.Component {
     }
 
     changeView(view, idx) {
-        this.setState(prevState => {
+        this.setState((prevState) => {
             let newViews = prevState.views.slice();
             newViews[idx] = view;
-            return ({
-                views: newViews
-            });
+            return {
+                views: newViews,
+            };
         });
     }
 
     changeSeason(season, idx) {
-        this.setState(prevState => {
+        this.setState((prevState) => {
             let newSeasons = prevState.seasons.slice();
             newSeasons[idx] = season;
             return { seasons: newSeasons };
@@ -71,22 +78,34 @@ class League extends React.Component {
                     view={view}
                     leagueIdx={leagueIdx}
                     season={season}
-                    changeSeason={(season, idx) => this.changeSeason(season, idx)}
+                    changeSeason={(season, idx) =>
+                        this.changeSeason(season, idx)
+                    }
                 />
-                <LeagueTable
-                    tableData={this.state.tables[leagueIdx][seasonIdx[season]]}
-                    view={view}
-                    leagueIdx={leagueIdx}
-                    populateTables={(data, idx, season) => this.populateTables(data, idx, season)}
-                    season={season}
-                />
-                <LeagueTopScorers leagueIdx={leagueIdx} view={view} season={season} />
-                <LeagueMatches 
-                    matchUps={this.state.matchUps[leagueIdx]}
-                    view={view}
-                    leagueIdx={leagueIdx}
-                    populateMatchUps={(data, idx) => this.populateMatchUps(data, idx)}
-                />
+                {view === "table" && (
+                    <LeagueTable
+                        tableData={
+                            this.state.tables[leagueIdx][seasonIdx[season]]
+                        }
+                        leagueIdx={leagueIdx}
+                        populateTables={(data, idx, season) =>
+                            this.populateTables(data, idx, season)
+                        }
+                        season={season}
+                    />
+                )}
+                {view === "top-scorers" && (
+                    <LeagueTopScorers leagueIdx={leagueIdx} season={season} />
+                )}
+                {view === "matches" && (
+                    <LeagueMatches
+                        matchUps={this.state.matchUps[leagueIdx]}
+                        leagueIdx={leagueIdx}
+                        populateMatchUps={(data, idx) =>
+                            this.populateMatchUps(data, idx)
+                        }
+                    />
+                )}
             </div>
         );
     }
