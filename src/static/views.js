@@ -1,15 +1,14 @@
 export const views = [
     {
         key: "table",
-        name: "Standings"
+        name: "Standings",
     },
     {
         key: "top-scorers",
-        name: "Top Scorers"
+        name: "Top Scorers",
     },
     {
         key: "matches",
-        name: "Matches"
-    }
-
+        name: "Matches",
+    },
 ];
