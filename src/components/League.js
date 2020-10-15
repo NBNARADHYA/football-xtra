@@ -17,15 +17,19 @@ const League = (props) => {
   const league = props.leagueIdx;
 
   const changeView = (view, idx) => {
-    let newViews = views.slice();
-    newViews[idx] = view;
-    setViews(newViews);
+    setViews((prevViews) => {
+      let newViews = [...prevViews];
+      newViews[idx] = view;
+      return newViews;
+    });
   };
 
   const changeSeason = (season, idx) => {
-    let newSeasons = seasons.slice();
-    newSeasons[idx] = season;
-    setSeasons(newSeasons);
+    setSeasons((prevSeasons) => {
+      let newSeasons = [...prevSeasons];
+      newSeasons[idx] = season;
+      return newSeasons;
+    });
   };
 
   const getTableData = useCallback(

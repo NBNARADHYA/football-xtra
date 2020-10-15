@@ -3,7 +3,7 @@ import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { views } from '../static/views';
 import { seasons } from '../static/seasons';
 
-const LeagueNavbar = (props) => {
+const ViewsNavbar = (props) => {
   const viewsNav = views.map((view) => {
     return (
       <Nav.Link key={view.key} eventKey={view.key}>
@@ -38,4 +38,4 @@ const LeagueNavbar = (props) => {
   );
 };
 
-export default LeagueNavbar;
+export default ViewsNavbar;
