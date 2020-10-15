@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { leagues } from "../static/leagues";
 
-const LeagueNavbar = (props) => {
+const LeaguesNavbar = (props) => {
     const leagueNav = leagues.map((league, leagueIdx) => {
         return (
             <Nav.Link className="ml-5" key={leagueIdx} eventKey={leagueIdx}>
@@ -25,4 +25,4 @@ const LeagueNavbar = (props) => {
     );
 };
 
-export default LeagueNavbar;
+export default LeaguesNavbar;
