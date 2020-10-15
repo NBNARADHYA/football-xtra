@@ -16,21 +16,21 @@ const League = (props) => {
   );
   const league = props.leagueIdx;
 
-  const changeView = (view, idx) => {
+  const changeView = useCallback((view, idx) => {
     setViews((prevViews) => {
       let newViews = [...prevViews];
       newViews[idx] = view;
       return newViews;
     });
-  };
+  }, []);
 
-  const changeSeason = (season, idx) => {
+  const changeSeason = useCallback((season, idx) => {
     setSeasons((prevSeasons) => {
       let newSeasons = [...prevSeasons];
       newSeasons[idx] = season;
       return newSeasons;
     });
-  };
+  }, []);
 
   const getTableData = useCallback(
     async (idx, season) => {
