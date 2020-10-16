@@ -86,17 +86,13 @@ const League = (props) => {
         changeSeason={changeSeason}
       />
       {view === 'table' && (
-        <LeagueTable
-          tableData={state.tables[league][seasonIdx[season]]}
-          leagueIdx={league}
-          season={season}
-        />
+        <LeagueTable tableData={state.tables[league][seasonIdx[season]]} />
       )}
       {view === 'top-scorers' && (
         <LeagueTopScorers leagueIdx={league} season={season} />
       )}
       {view === 'matches' && (
-        <LeagueMatches matchUps={state.matchUps[league]} leagueIdx={league} />
+        <LeagueMatches matchUps={state.matchUps[league]} />
       )}
     </div>
   );
