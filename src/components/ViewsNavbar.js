@@ -22,13 +22,13 @@ const ViewsNavbar = (props) => {
     <Navbar bg="dark" variant="dark">
       <Nav
         activeKey={props.view}
-        onSelect={(view) => props.changeLeagueView(view, props.leagueIdx)}
+        onSelect={(view) => props.changeLeagueView(view)}
       >
         {viewsNav}
       </Nav>
       <Nav
         activeKey={props.season}
-        onSelect={(season) => props.changeSeason(season, props.leagueIdx)}
+        onSelect={(season) => props.changeSeason(season)}
       >
         <NavDropdown title={`Season ${props.season}`}>
           {seasonsDropdownItems}

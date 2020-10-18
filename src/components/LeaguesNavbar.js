@@ -1,13 +1,14 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { leagues } from '../static/leagues';
+import { Link } from 'react-router-dom';
 
-const LeaguesNavbar = (props) => {
+const LeaguesNavbar = () => {
   const leagueNav = leagues.map((league, leagueIdx) => {
     return (
-      <Nav.Link className="ml-5" key={leagueIdx} eventKey={leagueIdx}>
+      <Link className="ml-5" key={leagueIdx} to={`/${league.shortHand}`}>
         <img src={league.logo} height="40" alt={league.name} />
-      </Nav.Link>
+      </Link>
     );
   });
   return (
@@ -17,9 +18,7 @@ const LeaguesNavbar = (props) => {
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="league-nav" />
       <Navbar.Collapse id="league-nav">
-        <Nav onSelect={(leagueIdx) => props.changeLeague(leagueIdx)}>
-          {leagueNav}
-        </Nav>
+        <Nav>{leagueNav}</Nav>
       </Navbar.Collapse>
     </Navbar>
   );

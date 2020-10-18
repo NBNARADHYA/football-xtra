@@ -1,12 +1,11 @@
 import { seasons as seasonsArr, seasonIdx } from '../static/seasons';
-import { leagues } from '../static/leagues';
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FILL_TABLES': {
-      const { table, error, idx, season } = action.payload;
+      const { table, error, season } = action.payload;
       let newTables = [...state.tables];
-      newTables[idx][seasonIdx[season]] = {
+      newTables[seasonIdx[season]] = {
         isLoaded: Boolean(!error),
         error,
         table,
@@ -14,14 +13,15 @@ const reducer = (state, action) => {
       return { ...state, tables: newTables };
     }
     case 'FILL_MATCHUPS': {
-      const { matches, error, idx } = action.payload;
-      let newMatchUps = [...state.matchUps];
-      newMatchUps[idx] = {
-        isLoaded: Boolean(!error),
-        error,
-        matches,
+      const { matches, error } = action.payload;
+      return {
+        ...state,
+        matchUps: {
+          isLoaded: Boolean(!error),
+          error,
+          matches,
+        },
       };
-      return { ...state, matchUps: newMatchUps };
     }
     default:
       throw new Error('Action Type Unavailable');
@@ -29,24 +29,18 @@ const reducer = (state, action) => {
 };
 
 export const initialState = {
-  tables: Array(leagues.length)
-    .fill(0)
-    .map(() =>
-      Array(seasonsArr.length)
-        .fill(0)
-        .map(() => ({
-          isLoaded: false,
-          error: null,
-          table: [],
-        }))
-    ),
-  matchUps: Array(leagues.length)
+  tables: Array(seasonsArr.length)
     .fill(0)
     .map(() => ({
       isLoaded: false,
       error: null,
-      matches: [],
+      table: [],
     })),
+  matchUps: {
+    isLoaded: false,
+    error: null,
+    matches: [],
+  },
 };
 
 export default reducer;
