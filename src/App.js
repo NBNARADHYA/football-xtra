@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import LeaguesNavbar from './components/LeaguesNavbar';
 import League from './components/League';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { leagues } from './static/leagues';
 
 const App = () => {
@@ -20,15 +15,13 @@ const App = () => {
     })
   );
   return (
-    <Router>
+    <>
       <LeaguesNavbar />
       <Switch>
         {leagueOutput}
-        <Route path="/">
-          <Redirect to="/epl" />
-        </Route>
+        <Redirect to="/epl" />
       </Switch>
-    </Router>
+    </>
   );
 };
 
