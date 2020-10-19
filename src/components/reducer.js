@@ -1,4 +1,4 @@
-import { produce } from 'immer';
+import produce from 'immer';
 import { seasons as seasonsArr, seasonIdx } from '../static/seasons';
 import { leagues } from '../static/leagues';
 
@@ -25,43 +25,37 @@ const initialState = {
   seasons: Array(leagues.length).fill('2020-2021'),
 };
 
-const reducer = (state = initialState, action) => {
+export default produce((draft, action) => {
   switch (action.type) {
     case 'FILL_TABLES': {
       const { table, error, season, league } = action.payload;
-      return produce(state, (draft) => {
-        draft.tables[league][seasonIdx[season]] = {
-          isLoaded: Boolean(!error),
-          error,
-          table,
-        };
-      });
+      draft.tables[league][seasonIdx[season]] = {
+        isLoaded: Boolean(!error),
+        error,
+        table,
+      };
+      break;
     }
     case 'FILL_MATCHUPS': {
       const { matches, error, league } = action.payload;
-      return produce(state, (draft) => {
-        draft.matchUps[league] = {
-          isLoaded: Boolean(!error),
-          error,
-          matches,
-        };
-      });
+      draft.matchUps[league] = {
+        isLoaded: Boolean(!error),
+        error,
+        matches,
+      };
+      break;
     }
     case 'CHANGE_SEASON': {
       const { league, season } = action.payload;
-      return produce(state, (draft) => {
-        draft.seasons[league] = season;
-      });
+      draft.seasons[league] = season;
+      break;
     }
     case 'CHANGE_VIEW': {
       const { league, view } = action.payload;
-      return produce(state, (draft) => {
-        draft.views[league] = view;
-      });
+      draft.views[league] = view;
+      break;
     }
     default:
-      return state;
+      break;
   }
-};
-
-export default reducer;
+}, initialState);

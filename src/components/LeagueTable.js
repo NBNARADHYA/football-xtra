@@ -3,7 +3,6 @@ import { Table } from 'react-bootstrap';
 
 const LeagueTable = (props) => {
   const { error, isLoaded, table } = props.tableData;
-  console.count(isLoaded);
   const style1 = { position: 'fixed', top: '50%', left: '50%' };
 
   if (error)
