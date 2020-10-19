@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import axios from 'axios';
 import LeagueTable from '../components/LeagueTable';
 import LeagueTopScorers from '../components/LeagueTopScorers';
@@ -6,31 +6,34 @@ import LeagueMatches from '../components/LeagueMatches';
 import ViewsNavbar from '../components/ViewsNavbar';
 import { leagues } from '../static/leagues';
 import { seasonIdx } from '../static/seasons';
-import reducer, { initialState } from './reducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 const League = ({ leagueIdx: league }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [view, setView] = useState('table');
-  const [season, setSeason] = useState('2020-2021');
+  const tables = useSelector((state) => state.tables[league]);
+  const matchUps = useSelector((state) => state.matchUps[league]);
+  const view = useSelector((state) => state.views[league]);
+  const season = useSelector((state) => state.seasons[league]);
 
-  const changeView = useCallback((view) => setView(view), []);
+  const dispatch = useDispatch();
+
+  const changeView = useCallback(
+    (view) => dispatch({ type: 'CHANGE_VIEW', payload: { view, league } }),
+    [league, dispatch]
+  );
 
   const changeSeason = useCallback(
     (season) => {
-      if (view === 'matches') {
-        setSeason(season);
-        setView('table');
-      } else {
-        setSeason(season);
-      }
+      dispatch({ type: 'CHANGE_SEASON', payload: { season, league } });
+      view === 'matches' &&
+        dispatch({ type: 'CHANGE_VIEW', payload: { view: 'table', league } });
     },
-    [view]
+    [view, league, dispatch]
   );
 
   const getTableData = useCallback(
     async (league, season) => {
-      if (state.tables[seasonIdx[season]].isLoaded) return;
-      let payload = { table: null, error: null, season };
+      if (tables[seasonIdx[season]].isLoaded) return;
+      let payload = { table: null, error: null, season, league };
       try {
         const response = await axios(
           `https://www.thesportsdb.com/api/v1/json/1/lookuptable.php?l=${leagues[league].id}&s=${season}`
@@ -41,13 +44,13 @@ const League = ({ leagueIdx: league }) => {
       }
       dispatch({ type: 'FILL_TABLES', payload });
     },
-    [state.tables]
+    [tables, dispatch]
   );
 
   const getMatchUpsData = useCallback(
     async (league) => {
-      if (state.matchUps.isLoaded) return;
-      let payload = { matches: null, error: null };
+      if (matchUps.isLoaded) return;
+      let payload = { matches: null, error: null, league };
       try {
         const response = await axios(
           `https://www.thesportsdb.com/api/v1/json/1/eventsnextleague.php?id=${leagues[league].id}`
@@ -58,7 +61,7 @@ const League = ({ leagueIdx: league }) => {
       }
       dispatch({ type: 'FILL_MATCHUPS', payload });
     },
-    [state.matchUps]
+    [matchUps, dispatch]
   );
 
   useEffect(() => {
@@ -74,17 +77,16 @@ const League = ({ leagueIdx: league }) => {
       <ViewsNavbar
         changeLeagueView={changeView}
         view={view}
-        leagueIdx={league}
         season={season}
         changeSeason={changeSeason}
       />
       {view === 'table' && (
-        <LeagueTable tableData={state.tables[seasonIdx[season]]} />
+        <LeagueTable tableData={tables[seasonIdx[season]]} />
       )}
       {view === 'top-scorers' && (
         <LeagueTopScorers leagueIdx={league} season={season} />
       )}
-      {view === 'matches' && <LeagueMatches matchUps={state.matchUps} />}
+      {view === 'matches' && <LeagueMatches matchUps={matchUps} />}
     </div>
   );
 };
