@@ -1,40 +1,43 @@
 import React from 'react';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import {
+  Tabs,
+  Tab,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@material-ui/core';
 import { views } from '../static/views';
 import { seasons } from '../static/seasons';
 
 const ViewsNavbar = (props) => {
-  const viewsNav = views.map((view) => {
-    return (
-      <Nav.Link key={view.key} eventKey={view.key}>
-        {view.name}
-      </Nav.Link>
-    );
+  const viewsTabs = views.map((view) => {
+    return <Tab value={view.key} key={view.key} label={view.name} />;
   });
-  const seasonsDropdownItems = seasons.map((season) => {
-    return (
-      <NavDropdown.Item eventKey={season} key={season}>
-        {season}
-      </NavDropdown.Item>
-    );
-  });
+  const seasonsSelectItems = seasons.map((season) => (
+    <MenuItem key={season} value={season}>
+      {season}
+    </MenuItem>
+  ));
   return (
-    <Navbar bg="dark" variant="dark">
-      <Nav
-        activeKey={props.view}
-        onSelect={(view) => props.changeLeagueView(view)}
+    <div>
+      <Tabs
+        className="mt-1 mb-2"
+        value={props.view}
+        onChange={(_, view) => props.changeLeagueView(view)}
       >
-        {viewsNav}
-      </Nav>
-      <Nav
-        activeKey={props.season}
-        onSelect={(season) => props.changeSeason(season)}
-      >
-        <NavDropdown title={`Season ${props.season}`}>
-          {seasonsDropdownItems}
-        </NavDropdown>
-      </Nav>
-    </Navbar>
+        {viewsTabs}
+      </Tabs>
+      <FormControl className="ml-3">
+        <InputLabel>Season</InputLabel>
+        <Select
+          value={props.season}
+          onChange={(event) => props.changeSeason(event.target.value)}
+        >
+          {seasonsSelectItems}
+        </Select>
+      </FormControl>
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ export const leagues = [
     id: 4328,
     name: 'Premier League',
     logo:
-      'https://www.thesportsdb.com/images/media/league/logo/4c377s1535214890.png/preview',
+      'https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Premier_League_Logo.svg/1920px-Premier_League_Logo.svg.png',
     shortHand: 'epl',
     div: 'E0',
   },
@@ -11,7 +11,7 @@ export const leagues = [
     id: 4335,
     name: 'La Liga',
     logo:
-      'https://www.thesportsdb.com/images/media/league/logo/b84z7h1565091817.png/preview',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LaLiga_Santander.svg/1024px-LaLiga_Santander.svg.png',
     shortHand: 'laliga',
     div: 'SP1',
   },
@@ -19,7 +19,7 @@ export const leagues = [
     id: 4331,
     name: 'Bundesliga',
     logo:
-      'https://www.thesportsdb.com/images/media/league/logo/620ayu1534764709.png/preview',
+      'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Bundesliga_logo_%282017%29.svg/1024px-Bundesliga_logo_%282017%29.svg.png',
     shortHand: 'bundesliga',
     div: 'D1',
   },
@@ -27,7 +27,7 @@ export const leagues = [
     id: 4332,
     name: 'Serie A',
     logo:
-      'https://www.thesportsdb.com/images/media/league/logo/r7q96i1557058508.png/preview',
+      'https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/Serie_A_logo_%282019%29.svg/800px-Serie_A_logo_%282019%29.svg.png',
     shortHand: 'seria',
     div: 'I1',
   },
@@ -35,7 +35,7 @@ export const leagues = [
     id: 4334,
     name: 'French Ligue 1',
     logo:
-      'https://www.thesportsdb.com/images/media/league/logo/ngx4y91592927675.png/preview',
+      'https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Ligue_1_Uber_Eats.svg/800px-Ligue_1_Uber_Eats.svg.png',
     shortHand: 'ligue1',
     div: 'F1',
   },

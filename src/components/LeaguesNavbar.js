@@ -1,26 +1,29 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
 import { leagues } from '../static/leagues';
 import { Link } from 'react-router-dom';
+import { Tabs, Tab, AppBar } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 const LeaguesNavbar = () => {
-  const leagueNav = leagues.map((league, leagueIdx) => {
+  const league = useSelector((state) => state.league);
+
+  const leagueTabs = leagues.map((league, leagueIdx) => {
     return (
-      <Link className="ml-5" key={leagueIdx} to={`/${league.shortHand}`}>
-        <img src={league.logo} height="40" alt={league.name} />
+      <Link key={leagueIdx} to={`/${league.shortHand}`}>
+        <Tab
+          style={{ marginRight: 5 }}
+          value={leagueIdx}
+          icon={<img src={league.logo} height="50" alt={league.name} />}
+        />
       </Link>
     );
   });
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand className="ml-5 mr-5" href="/">
-        Football Xtra
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="league-nav" />
-      <Navbar.Collapse id="league-nav">
-        <Nav>{leagueNav}</Nav>
-      </Navbar.Collapse>
-    </Navbar>
+    <AppBar position="static" textColor="primary" color="transparent">
+      <Tabs color="transparent" value={league}>
+        {leagueTabs}
+      </Tabs>
+    </AppBar>
   );
 };
 

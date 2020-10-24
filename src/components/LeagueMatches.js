@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Card, Button } from 'react-bootstrap';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography,
+  Divider,
+  Button,
+} from '@material-ui/core';
 import { weekDays } from '../static/weekDays';
 
 const getDate = (date, time) => {
@@ -40,17 +47,19 @@ const LeagueMatches = (props) => {
     .slice(0, numMatches - 1)
     .map((match, index) => {
       return (
-        <Card key={index} border="secondary" className="text-center ">
-          <Card.Body>
-            <Card.Text>
-              {match.hometeam}{' '}
-              <strong>
-                {match.fthg} - {match.ftag}
-              </strong>{' '}
-              {match.awayteam}
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>{getDate(match.date, match.time)}</Card.Footer>
+        <Card key={index}>
+          <CardActionArea style={{ textAlign: 'center' }}>
+            <CardContent>
+              <Typography gutterBottom>
+                {match.hometeam} {match.fthg} - {match.ftag} {match.awayteam}
+              </Typography>
+              <Typography color="textSecondary">
+                {getDate(match.date, match.time)}
+              </Typography>
+            </CardContent>
+
+            <Divider variant="middle" />
+          </CardActionArea>
         </Card>
       );
     });
@@ -58,9 +67,9 @@ const LeagueMatches = (props) => {
   return (
     <div>
       {matchesDisplay}{' '}
-      <div className="text-center">
+      <div style={{ textAlign: 'center' }}>
         <Button
-          variant="secondary"
+          variant="contained"
           onClick={() =>
             setNumMatches((prev) => Math.min(prev + 15, matches.length))
           }

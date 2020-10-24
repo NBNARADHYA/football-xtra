@@ -17,6 +17,7 @@ const initialState = {
     ),
   views: Array(leagues.length).fill('table'),
   seasons: Array(leagues.length).fill('2021'),
+  league: 0,
 };
 
 export default produce((draft, action) => {
@@ -39,6 +40,10 @@ export default produce((draft, action) => {
     case 'CHANGE_VIEW': {
       const { league, view } = action.payload;
       draft.views[league] = view;
+      break;
+    }
+    case 'CHANGE_LEAGUE': {
+      draft.league = action.payload.league;
       break;
     }
     default:

@@ -14,6 +14,7 @@ const App = () => {
       );
     })
   );
+  console.log('here');
   return (
     <>
       <LeaguesNavbar />
