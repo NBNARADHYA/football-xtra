@@ -1,22 +1,29 @@
-import React from 'react';
-import { Card } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, Button } from 'react-bootstrap';
 import { weekDays } from '../static/weekDays';
 
-const getDate = (timeStamp) => {
-  const d = new Date(timeStamp);
-  return `${
-    weekDays[d.getDay()]
-  }, ${d.getDate()}/${d.getMonth()} at ${d.getHours()}:${d.getMinutes()} IST`;
+const getDate = (date, time) => {
+  const d = new Date(Number(date));
+  let dateOutput = `${weekDays[d.getDay()]}, ${d.getDate()}/${d.getMonth()}/${
+    d.getFullYear() % 100
+  }`;
+  if (time) {
+    d.setTime(Date.parse(`01 Jan 1970 ${time} GMT`));
+    dateOutput += ` at ${d.getHours()}:${d.getMinutes()} IST`;
+  }
+  return dateOutput;
 };
 
 const LeagueMatches = (props) => {
-  const { error, isLoaded, matches } = props.matchUps;
+  const { error, loading, data } = props.matchUps;
   const style1 = { position: 'fixed', top: '50%', left: '50%' };
+
+  const [numMatches, setNumMatches] = useState(15);
 
   if (error)
     return <div style={style1}>Sorry, Unable to fetch the matches</div>;
 
-  if (!isLoaded) {
+  if (loading) {
     const style = { position: 'fixed', top: '40%', left: '37%' };
     return (
       <img
@@ -27,21 +34,42 @@ const LeagueMatches = (props) => {
     );
   }
 
-  const matchesDisplay = matches.map((match, index) => {
-    return (
-      <Card key={index} border="secondary" className="text-center ">
-        <Card.Header>Matchday {match.intRound}</Card.Header>
-        <Card.Body>
-          <Card.Text>
-            {match.strHomeTeam} vs {match.strAwayTeam}
-          </Card.Text>
-        </Card.Body>
-        <Card.Footer>{getDate(match.strTimestamp)}</Card.Footer>
-      </Card>
-    );
-  });
+  const { matches } = data;
 
-  return <div>{matchesDisplay}</div>;
+  const matchesDisplay = matches
+    .slice(0, numMatches - 1)
+    .map((match, index) => {
+      return (
+        <Card key={index} border="secondary" className="text-center ">
+          <Card.Body>
+            <Card.Text>
+              {match.hometeam}{' '}
+              <strong>
+                {match.fthg} - {match.ftag}
+              </strong>{' '}
+              {match.awayteam}
+            </Card.Text>
+          </Card.Body>
+          <Card.Footer>{getDate(match.date, match.time)}</Card.Footer>
+        </Card>
+      );
+    });
+
+  return (
+    <div>
+      {matchesDisplay}{' '}
+      <div className="text-center">
+        <Button
+          variant="secondary"
+          onClick={() =>
+            setNumMatches((prev) => Math.min(prev + 15, matches.length))
+          }
+        >
+          Load More Matches
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export default LeagueMatches;

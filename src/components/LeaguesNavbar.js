@@ -13,7 +13,7 @@ const LeaguesNavbar = () => {
   });
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-      <Navbar.Brand className="ml-5 mr-5" href="http://localhost:3000">
+      <Navbar.Brand className="ml-5 mr-5" href="/">
         Football Xtra
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="league-nav" />

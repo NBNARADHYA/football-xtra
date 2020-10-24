@@ -1,6 +1,7 @@
 import produce from 'immer';
 import { seasons as seasonsArr, seasonIdx } from '../static/seasons';
 import { leagues } from '../static/leagues';
+import { getTableFromMatches } from './helpers';
 
 const initialState = {
   tables: Array(leagues.length)
@@ -14,34 +15,19 @@ const initialState = {
           table: [],
         }))
     ),
-  matchUps: Array(leagues.length)
-    .fill(0)
-    .map(() => ({
-      isLoaded: false,
-      error: null,
-      matches: [],
-    })),
   views: Array(leagues.length).fill('table'),
-  seasons: Array(leagues.length).fill('2020-2021'),
+  seasons: Array(leagues.length).fill('2021'),
 };
 
 export default produce((draft, action) => {
   switch (action.type) {
     case 'FILL_TABLES': {
-      const { table, error, season, league } = action.payload;
+      const { data, error, season, league } = action.payload;
+      const table = getTableFromMatches(data, error);
       draft.tables[league][seasonIdx[season]] = {
-        isLoaded: Boolean(!error),
+        isLoaded: table.length || Boolean(error),
         error,
         table,
-      };
-      break;
-    }
-    case 'FILL_MATCHUPS': {
-      const { matches, error, league } = action.payload;
-      draft.matchUps[league] = {
-        isLoaded: Boolean(!error),
-        error,
-        matches,
       };
       break;
     }

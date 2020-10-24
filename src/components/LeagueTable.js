@@ -24,14 +24,14 @@ const LeagueTable = (props) => {
       <tr key={pos}>
         <td>{pos + 1}</td>
         <td>{club.name}</td>
-        <td>{club.played}</td>
-        <td>{club.goalsfor}</td>
-        <td>{club.goalsagainst}</td>
-        <td>{club.goalsdifference}</td>
-        <td>{club.win}</td>
-        <td>{club.draw}</td>
-        <td>{club.loss}</td>
-        <td>{club.total}</td>
+        <td>{club.mp}</td>
+        <td>{club.gf}</td>
+        <td>{club.ga}</td>
+        <td>{club.gd}</td>
+        <td>{club.w}</td>
+        <td>{club.d}</td>
+        <td>{club.l}</td>
+        <td>{club.p}</td>
       </tr>
     );
   });
