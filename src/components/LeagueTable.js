@@ -5,26 +5,18 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  CircularProgress,
 } from '@material-ui/core';
 
 const LeagueTable = (props) => {
   const { error, isLoaded, table } = props.tableData;
-  const style1 = { position: 'fixed', top: '50%', left: '50%' };
+  const style = { position: 'fixed', top: '50%', left: '50%' };
 
   if (error)
-    return (
-      <div style={style1}>Sorry, Unable to fetch TableCelle standings</div>
-    );
+    return <div style={style}>Sorry, Unable to fetch TableCelle standings</div>;
 
   if (!isLoaded) {
-    const style = { position: 'fixed', top: '40%', left: '37%' };
-    return (
-      <img
-        style={style}
-        src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
-        alt="Loading..."
-      />
-    );
+    return <CircularProgress color="primary" style={style} />;
   }
 
   const standings = table.map((club, pos) => {
