@@ -36,10 +36,6 @@ const League = ({ leagueIdx: league }) => {
   );
 
   useEffect(() => {
-    dispatch({ type: 'CHANGE_LEAGUE', payload: { league } });
-  }, [league, dispatch]);
-
-  useEffect(() => {
     if (view === 'table') {
       if (tables[seasonIdx[season]].isLoaded || loading) return;
       dispatch({

@@ -1,11 +1,10 @@
 import React from 'react';
 import { leagues } from '../static/leagues';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Tabs, Tab, AppBar } from '@material-ui/core';
-import { useSelector } from 'react-redux';
 
 const LeaguesNavbar = () => {
-  const league = useSelector((state) => state.league);
+  const location = useLocation();
 
   const leagueTabs = leagues.map((league, leagueIdx) => {
     return (
@@ -13,14 +12,17 @@ const LeaguesNavbar = () => {
         <Tab
           style={{ marginRight: 5 }}
           value={leagueIdx}
-          icon={<img src={league.logo} height="50" alt={league.name} />}
+          icon={<img src={league.logo} height="55" alt={league.name} />}
         />
       </Link>
     );
   });
+  const currLocIdx = leagues.findIndex(
+    (league) => `/${league.shortHand}` === location.pathname
+  );
   return (
     <AppBar position="static" textColor="primary" color="transparent">
-      <Tabs color="transparent" value={league}>
+      <Tabs color="transparent" value={currLocIdx}>
         {leagueTabs}
       </Tabs>
     </AppBar>
