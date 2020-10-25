@@ -5,6 +5,7 @@ import {
   CardContent,
   Typography,
   Divider,
+  CircularProgress,
 } from '@material-ui/core';
 import { Waypoint } from 'react-waypoint';
 import { weekDays } from '../static/weekDays';
@@ -23,7 +24,7 @@ const getDate = (date, time) => {
 
 const LeagueMatches = (props) => {
   const { error, loading, data } = props.matchUps;
-  const style1 = { position: 'fixed', top: '50%', left: '50%' };
+  const style = { position: 'fixed', top: '50%', left: '50%' };
 
   const [numMatches, setNumMatches] = useState(15);
 
@@ -31,18 +32,10 @@ const LeagueMatches = (props) => {
     setNumMatches(15);
   }, [props]);
 
-  if (error)
-    return <div style={style1}>Sorry, Unable to fetch the matches</div>;
+  if (error) return <div style={style}>Sorry, Unable to fetch the matches</div>;
 
   if (loading) {
-    const style = { position: 'fixed', top: '40%', left: '37%' };
-    return (
-      <img
-        style={style}
-        src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
-        alt="Loading..."
-      />
-    );
+    return <CircularProgress color="primary" style={style} />;
   }
 
   const { matches } = data;
