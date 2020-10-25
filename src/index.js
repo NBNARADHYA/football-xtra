@@ -13,7 +13,7 @@ const store = createStore(
 );
 
 const client = new ApolloClient({
-  uri: 'http://localhost:5000/graphql',
+  uri: 'https://football-xtra.herokuapp.com/graphql',
   cache: new InMemoryCache(),
 });
 
