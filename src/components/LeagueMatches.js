@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardActionArea,
   CardContent,
   Typography,
   Divider,
-  Button,
 } from '@material-ui/core';
+import { Waypoint } from 'react-waypoint';
 import { weekDays } from '../static/weekDays';
 
 const getDate = (date, time) => {
@@ -27,6 +27,10 @@ const LeagueMatches = (props) => {
 
   const [numMatches, setNumMatches] = useState(15);
 
+  useEffect(() => {
+    setNumMatches(15);
+  }, [props]);
+
   if (error)
     return <div style={style1}>Sorry, Unable to fetch the matches</div>;
 
@@ -43,41 +47,34 @@ const LeagueMatches = (props) => {
 
   const { matches } = data;
 
-  const matchesDisplay = matches
-    .slice(0, numMatches - 1)
-    .map((match, index) => {
-      return (
-        <Card key={index}>
-          <CardActionArea style={{ textAlign: 'center' }}>
-            <CardContent>
-              <Typography gutterBottom>
-                {match.hometeam} {match.fthg} - {match.ftag} {match.awayteam}
-              </Typography>
-              <Typography color="textSecondary">
-                {getDate(match.date, match.time)}
-              </Typography>
-            </CardContent>
-
-            <Divider variant="middle" />
-          </CardActionArea>
-        </Card>
-      );
-    });
-
   return (
-    <div>
-      {matchesDisplay}{' '}
-      <div style={{ textAlign: 'center' }}>
-        <Button
-          variant="contained"
-          onClick={() =>
-            setNumMatches((prev) => Math.min(prev + 15, matches.length))
-          }
-        >
-          Load More Matches
-        </Button>
-      </div>
-    </div>
+    <>
+      {matches.slice(0, numMatches).map((match, index) => {
+        return (
+          <Card key={index}>
+            <CardActionArea style={{ textAlign: 'center' }}>
+              <CardContent>
+                <Typography gutterBottom>
+                  {match.hometeam} {match.fthg} - {match.ftag} {match.awayteam}
+                </Typography>
+                <Typography color="textSecondary">
+                  {getDate(match.date, match.time)}
+                </Typography>
+              </CardContent>
+              <Divider variant="middle" />
+            </CardActionArea>
+            {index === numMatches - 1 && (
+              <Waypoint
+                onEnter={() =>
+                  numMatches !== matches.length &&
+                  setNumMatches((prev) => Math.min(prev + 15, matches.length))
+                }
+              />
+            )}
+          </Card>
+        );
+      })}
+    </>
   );
 };
 
