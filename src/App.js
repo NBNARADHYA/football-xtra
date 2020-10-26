@@ -1,33 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LeaguesNavbar from './components/LeaguesNavbar';
 import League from './components/League';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { leagues } from './static/leagues';
 
-class App extends React.Component {
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      currLeague: 0
-    };
-  }
-
-  changeLeague(idx) {
-    this.setState({
-      currLeague: idx
-    });
-  }
-
-  render() {
-
-    return (
-      <div>
-        <LeaguesNavbar changeLeague={idx => this.changeLeague(idx)} />
-        <League
-          leagueIdx={this.state.currLeague}
-        />
-      </div>
-    );
-  }
-}
+const App = () => {
+  const [leagueOutput] = useState(
+    leagues.map((league, idx) => {
+      return (
+        <Route path={`/${league.shortHand}`} key={idx}>
+          <League leagueIdx={idx} />
+        </Route>
+      );
+    })
+  );
+  return (
+    <>
+      <LeaguesNavbar />
+      <Switch>
+        {leagueOutput}
+        <Redirect to="/epl" />
+      </Switch>
+    </>
+  );
+};
 
 export default App;

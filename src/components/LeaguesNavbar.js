@@ -1,28 +1,32 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
 import { leagues } from '../static/leagues';
+import { Link, useLocation } from 'react-router-dom';
+import { Tabs, Tab, AppBar } from '@material-ui/core';
 
-class LeagueNavbar extends React.Component {
-    render() {
-        const leagueNav = leagues.map((league, leagueIdx) => {
-            return (
-                <Nav.Link className="ml-5" key={leagueIdx} eventKey={leagueIdx}>
-                    <img src={league.logo} height="40" alt={league.name} />
-                </Nav.Link>
-            );
-        });
-        return (
-            <Navbar bg="dark" variant="dark" expand="lg">
-                <Navbar.Brand className="ml-5 mr-5" href="http://localhost:3000">Football Xtra</Navbar.Brand>
-                <Navbar.Toggle aria-controls="league-nav" />
-                <Navbar.Collapse id="league-nav">
-                    <Nav onSelect={leagueIdx => this.props.changeLeague(leagueIdx)}>
-                        {leagueNav}
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
-        );
-    }
-}
+const LeaguesNavbar = () => {
+  const location = useLocation();
 
-export default LeagueNavbar;
+  const leagueTabs = leagues.map((league, leagueIdx) => {
+    return (
+      <Link key={leagueIdx} to={`/${league.shortHand}`}>
+        <Tab
+          style={{ marginRight: 5 }}
+          value={leagueIdx}
+          icon={<img src={league.logo} height="55" alt={league.name} />}
+        />
+      </Link>
+    );
+  });
+  const currLocIdx = leagues.findIndex(
+    (league) => `/${league.shortHand}` === location.pathname
+  );
+  return (
+    <AppBar position="static" textColor="primary" color="transparent">
+      <Tabs color="transparent" value={currLocIdx}>
+        {leagueTabs}
+      </Tabs>
+    </AppBar>
+  );
+};
+
+export default LeaguesNavbar;

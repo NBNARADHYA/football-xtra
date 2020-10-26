@@ -1,85 +1,74 @@
-import React from "react";
-import axios from "axios";
-import { Card } from "react-bootstrap";
-import { leagues } from "../static/leagues";
-import { weekDays } from "../static/weekDays";
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography,
+  Divider,
+  CircularProgress,
+} from '@material-ui/core';
+import { Waypoint } from 'react-waypoint';
+import { weekDays } from '../static/weekDays';
 
-class LeagueMatches extends React.Component {
-    getMatchUpsData(idx) {
-        axios
-            .get(
-                `https://www.thesportsdb.com/api/v1/json/1/eventsnextleague.php?id=${leagues[idx].id}`
-            )
-            .then(
-                (res) => {
-                    this.props.populateMatchUps(
-                        {
-                            isLoaded: true,
-                            matches: res.data.events,
-                            error: null,
-                        },
-                        idx
-                    );
-                },
-                (error) => {
-                    this.props.populateMatchUps(
-                        {
-                            error,
-                            isLoaded: false,
-                            matches: [],
-                        },
-                        idx
-                    );
+const getDate = (date, time) => {
+  const d = new Date(Number(date));
+  let dateOutput = `${weekDays[d.getDay()]}, ${d.getDate()}/${d.getMonth()}/${
+    d.getFullYear() % 100
+  }`;
+  if (time) {
+    d.setTime(Date.parse(`01 Jan 1970 ${time} GMT`));
+    dateOutput += ` at ${d.getHours()}:${d.getMinutes()} IST`;
+  }
+  return dateOutput;
+};
+
+const LeagueMatches = (props) => {
+  const { error, loading, data } = props.matchUps;
+  const style = { position: 'fixed', top: '50%', left: '50%' };
+
+  const [numMatches, setNumMatches] = useState(15);
+
+  useEffect(() => {
+    setNumMatches(15);
+  }, [props]);
+
+  if (error) return <div style={style}>Sorry, Unable to fetch the matches</div>;
+
+  if (loading) {
+    return <CircularProgress color="primary" style={style} />;
+  }
+
+  const { matches } = data;
+
+  return (
+    <>
+      {matches.slice(0, numMatches).map((match, index) => {
+        return (
+          <Card key={index}>
+            <CardActionArea style={{ textAlign: 'center' }}>
+              <CardContent>
+                <Typography gutterBottom>
+                  {match.hometeam} {match.fthg} - {match.ftag} {match.awayteam}
+                </Typography>
+                <Typography color="textSecondary">
+                  {getDate(match.date, match.time)}
+                </Typography>
+              </CardContent>
+              <Divider variant="middle" />
+            </CardActionArea>
+            {index === numMatches - 1 && (
+              <Waypoint
+                onEnter={() =>
+                  numMatches !== matches.length &&
+                  setNumMatches((prev) => Math.min(prev + 15, matches.length))
                 }
-            );
-    }
-
-    getDate(timeStamp) {
-        const d = new Date(timeStamp);
-        return `${
-            weekDays[d.getDay()]
-        }, ${d.getDate()}/${d.getMonth()} at ${d.getHours()}:${d.getMinutes()} IST`;
-    }
-
-    render() {
-        const { error, isLoaded, matches } = this.props.matchUps;
-        const style1 = { position: "fixed", top: "50%", left: "50%" };
-
-        if (error)
-            return (
-                <div style={style1}>Sorry, Unable to fetch the standings</div>
-            );
-
-        if (!isLoaded) {
-            this.getMatchUpsData(this.props.leagueIdx);
-            const style = { position: "fixed", top: "40%", left: "37%" };
-            return (
-                <img
-                    style={style}
-                    src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
-                    alt="Loading..."
-                />
-            );
-        }
-
-        const matchesDisplay = matches.map((match, index) => {
-            return (
-                <Card key={index} border="secondary" className="text-center ">
-                    <Card.Header>Matchday {match.intRound}</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                            {match.strHomeTeam} vs {match.strAwayTeam}
-                        </Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                        {this.getDate(match.strTimestamp)}
-                    </Card.Footer>
-                </Card>
-            );
-        });
-
-        return <div>{matchesDisplay}</div>;
-    }
-}
+              />
+            )}
+          </Card>
+        );
+      })}
+    </>
+  );
+};
 
 export default LeagueMatches;
