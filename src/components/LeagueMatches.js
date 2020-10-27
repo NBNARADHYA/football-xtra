@@ -7,6 +7,14 @@ import {
   Divider,
   CircularProgress,
   Collapse,
+  TextField,
+  Table,
+  TableContainer,
+  Paper,
+  TableHead,
+  TableCell,
+  TableRow,
+  TableBody,
 } from '@material-ui/core';
 import { Waypoint } from 'react-waypoint';
 import { weekDays } from '../static/weekDays';
@@ -29,14 +37,37 @@ const getDate = (date, time) => {
 
 const LeagueMatches = (props) => {
   const { error, loading, data } = props.matchUps;
-  const style = { position: 'fixed', top: '50%', left: '50%' };
 
   const [numMatches, setNumMatches] = useState(15);
   const [collapseId, setCollapseId] = useState(-1);
+  const [searchMatchString, setSearchMatchString] = useState('');
+  const [matches, setMatches] = useState(data && data.matches);
 
   useEffect(() => {
     setNumMatches(15);
+    setSearchMatchString('');
+    setCollapseId(-1);
+    if (props.matchUps.data) setMatches(props.matchUps.data.matches);
   }, [props]);
+
+  useEffect(() => {
+    if (searchMatchString.length && data) {
+      setMatches(
+        data.matches.filter((match) => {
+          return (
+            match.hometeam
+              .toLowerCase()
+              .indexOf(searchMatchString.toLowerCase()) !== -1 ||
+            match.awayteam
+              .toLowerCase()
+              .indexOf(searchMatchString.toLowerCase()) !== -1
+          );
+        })
+      );
+    }
+  }, [searchMatchString, data]);
+
+  const style = { position: 'fixed', top: '50%', left: '50%' };
 
   if (error) return <div style={style}>Sorry, Unable to fetch the matches</div>;
 
@@ -44,10 +75,16 @@ const LeagueMatches = (props) => {
     return <CircularProgress color="primary" style={style} />;
   }
 
-  const { matches } = data;
-
   return (
     <>
+      <br />
+      <TextField
+        variant="filled"
+        label="Search Matches"
+        value={searchMatchString}
+        onChange={(event) => setSearchMatchString(event.target.value)}
+      />
+      <br />
       {matches.slice(0, numMatches).map((match, index) => {
         return (
           <Card
@@ -72,7 +109,63 @@ const LeagueMatches = (props) => {
                 </Typography>
               </CardContent>
               <Collapse in={collapseId === index}>
-                {match.hometeam} {match.fthg} - {match.ftag} {match.awayteam}
+                <TableContainer component={Paper}>
+                  {match.referee && <div>Referee: {match.referee}</div>}
+                  {(match.hs ||
+                    match.hst ||
+                    match.hc ||
+                    match.hy ||
+                    match.hr) && (
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="left">{match.hometeam}</TableCell>
+                          <TableCell align="center">Match Stats</TableCell>
+                          <TableCell align="right">{match.awayteam}</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {match.hs !== undefined && (
+                          <TableRow>
+                            <TableCell align="left">{match.hs}</TableCell>
+                            <TableCell align="center">Shots</TableCell>
+                            <TableCell align="right">{match.aws}</TableCell>
+                          </TableRow>
+                        )}
+                        {match.hst !== undefined && (
+                          <TableRow>
+                            <TableCell align="left">{match.hst}</TableCell>
+                            <TableCell align="center">
+                              Shots on Target
+                            </TableCell>
+                            <TableCell align="right">{match.ast}</TableCell>
+                          </TableRow>
+                        )}
+                        {match.hc !== undefined && (
+                          <TableRow>
+                            <TableCell align="left">{match.hc}</TableCell>
+                            <TableCell align="center">Corners</TableCell>
+                            <TableCell align="right">{match.ac}</TableCell>
+                          </TableRow>
+                        )}
+                        {match.hy !== undefined && (
+                          <TableRow>
+                            <TableCell align="left">{match.hy}</TableCell>
+                            <TableCell align="center">Yellow Cards</TableCell>
+                            <TableCell align="right">{match.ay}</TableCell>
+                          </TableRow>
+                        )}
+                        {match.hr !== undefined && (
+                          <TableRow>
+                            <TableCell align="left">{match.hr}</TableCell>
+                            <TableCell align="center">Red Cards</TableCell>
+                            <TableCell align="right">{match.ar}</TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  )}
+                </TableContainer>
               </Collapse>
               <Divider variant="middle" />
             </CardActionArea>
