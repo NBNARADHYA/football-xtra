@@ -22,12 +22,14 @@ import { weekDays } from '../static/weekDays';
 const getDate = (date, time) => {
   const d = new Date(Number(date));
   let year = d.getFullYear() % 100;
+  let month = d.getMonth();
   if (year.toString().length < 2) {
     year = `0${year}`;
   }
-  let dateOutput = `${
-    weekDays[d.getDay()]
-  }, ${d.getDate()}/${d.getMonth()}/${year}`;
+  if (month.toString().length < 2) {
+    month = `0${month}`;
+  }
+  let dateOutput = `${weekDays[d.getDay()]}, ${d.getDate()}/${month}/${year}`;
   if (time) {
     d.setTime(Date.parse(`01 Jan 1970 ${time} GMT`));
     dateOutput += ` at ${d.getHours()}:${d.getMinutes()} IST`;
@@ -38,13 +40,15 @@ const getDate = (date, time) => {
 const LeagueMatches = (props) => {
   const { error, loading, data } = props.matchUps;
 
-  const [numMatches, setNumMatches] = useState(15);
+  const [matchIndex, setMatchIndex] = useState([0, 14]);
   const [collapseId, setCollapseId] = useState(-1);
   const [searchMatchString, setSearchMatchString] = useState('');
   const [matches, setMatches] = useState(data && data.matches);
+  const [maxIndex, setMaxIndex] = useState(14);
 
   useEffect(() => {
-    setNumMatches(15);
+    setMatchIndex([0, 14]);
+    setMaxIndex(14);
     setSearchMatchString('');
     setCollapseId(-1);
     if (props.matchUps.data) setMatches(props.matchUps.data.matches);
@@ -75,6 +79,8 @@ const LeagueMatches = (props) => {
     return <CircularProgress color="primary" style={style} />;
   }
 
+  const [startMatchIndex, endMatchIndex] = matchIndex;
+
   return (
     <>
       <br />
@@ -85,7 +91,18 @@ const LeagueMatches = (props) => {
         onChange={(event) => setSearchMatchString(event.target.value)}
       />
       <br />
-      {matches.slice(0, numMatches).map((match, index) => {
+      {matches.slice(0, maxIndex + 1).map((match, index) => {
+        if (index < startMatchIndex || index > endMatchIndex) {
+          return (
+            <Card key={index}>
+              <CardContent>
+                <Typography gutterBottom>hi</Typography>
+                <Typography color="textSecondary">1</Typography>
+              </CardContent>
+              <Divider variant="middle" />
+            </Card>
+          );
+        }
         return (
           <Card
             key={index}
@@ -169,12 +186,41 @@ const LeagueMatches = (props) => {
               </Collapse>
               <Divider variant="middle" />
             </CardActionArea>
-            {index === numMatches - 1 && (
+            {index === startMatchIndex && (
               <Waypoint
-                onEnter={() =>
-                  numMatches !== matches.length &&
-                  setNumMatches((prev) => Math.min(prev + 15, matches.length))
-                }
+                onEnter={() => {
+                  if (startMatchIndex !== 0) {
+                    setMatchIndex((prev) => {
+                      let [nextStartMatchIndex, nextEndMatchIndex] = prev;
+                      nextStartMatchIndex = Math.max(
+                        nextStartMatchIndex - 15,
+                        0
+                      );
+                      if (nextEndMatchIndex - nextStartMatchIndex + 1 === 45)
+                        nextEndMatchIndex -= 15;
+                      return [nextStartMatchIndex, nextEndMatchIndex];
+                    });
+                  }
+                }}
+              />
+            )}
+            {index === endMatchIndex && (
+              <Waypoint
+                onEnter={() => {
+                  if (endMatchIndex !== matches.length - 1) {
+                    setMatchIndex((prev) => {
+                      let [nextStartMatchIndex, nextEndMatchIndex] = prev;
+                      nextEndMatchIndex = Math.min(
+                        nextEndMatchIndex + 15,
+                        matches.length - 1
+                      );
+                      if (nextEndMatchIndex - nextStartMatchIndex + 1 === 45)
+                        nextStartMatchIndex += 15;
+                      setMaxIndex((prev) => Math.max(prev, nextEndMatchIndex));
+                      return [nextStartMatchIndex, nextEndMatchIndex];
+                    });
+                  }
+                }}
               />
             )}
           </Card>
