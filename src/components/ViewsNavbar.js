@@ -16,7 +16,7 @@ const ViewsNavbar = (props) => {
   });
   const seasonsSelectItems = seasons.map((season) => (
     <MenuItem key={season} value={season}>
-      {season}
+      {season.slice(0, 2)}-{season.slice(2, 4)}
     </MenuItem>
   ));
   return (
