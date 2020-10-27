@@ -2,6 +2,8 @@
 
 Football scores and stats
 
+You can find the website at https://football-xtra-graphql.netlify.app/
+
 ## Available Scripts
 
 In the project directory, you can run:

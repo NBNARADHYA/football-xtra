@@ -12,7 +12,7 @@ export const GET_MATCHES = gql`
       ftr
       referee
       hs
-      as
+      aws
       hst
       ast
       hf
