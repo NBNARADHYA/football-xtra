@@ -8,36 +8,14 @@ import {
   CircularProgress,
   Collapse,
   TextField,
-  Table,
   TableContainer,
   Paper,
-  TableHead,
-  TableCell,
-  TableRow,
-  TableBody,
 } from '@material-ui/core';
 import { Waypoint } from 'react-waypoint';
-import { weekDays } from '../static/weekDays';
+import MatchInfo from './MatchInfo';
+import getDate from './getDate';
 
-const getDate = (date, time) => {
-  const d = new Date(Number(date));
-  let year = d.getFullYear() % 100;
-  let month = d.getMonth();
-  if (year.toString().length < 2) {
-    year = `0${year}`;
-  }
-  if (month.toString().length < 2) {
-    month = `0${month}`;
-  }
-  let dateOutput = `${weekDays[d.getDay()]}, ${d.getDate()}/${month}/${year}`;
-  if (time) {
-    d.setTime(Date.parse(`01 Jan 1970 ${time} GMT`));
-    dateOutput += ` at ${d.getHours()}:${d.getMinutes()} IST`;
-  }
-  return dateOutput;
-};
-
-const LeagueMatches = (props) => {
+export default (props) => {
   const { error, loading, data } = props.matchUps;
 
   const [matchIndex, setMatchIndex] = useState([0, 14]);
@@ -96,8 +74,12 @@ const LeagueMatches = (props) => {
           return (
             <Card key={index}>
               <CardContent>
-                <Typography gutterBottom>hi</Typography>
-                <Typography color="textSecondary">1</Typography>
+                <Typography gutterBottom>
+                  <br />
+                </Typography>
+                <Typography color="textSecondary">
+                  <br />
+                </Typography>
               </CardContent>
               <Divider variant="middle" />
             </Card>
@@ -132,56 +114,7 @@ const LeagueMatches = (props) => {
                     match.hst ||
                     match.hc ||
                     match.hy ||
-                    match.hr) && (
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="left">{match.hometeam}</TableCell>
-                          <TableCell align="center">Match Stats</TableCell>
-                          <TableCell align="right">{match.awayteam}</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {match.hs !== undefined && (
-                          <TableRow>
-                            <TableCell align="left">{match.hs}</TableCell>
-                            <TableCell align="center">Shots</TableCell>
-                            <TableCell align="right">{match.aws}</TableCell>
-                          </TableRow>
-                        )}
-                        {match.hst !== undefined && (
-                          <TableRow>
-                            <TableCell align="left">{match.hst}</TableCell>
-                            <TableCell align="center">
-                              Shots on Target
-                            </TableCell>
-                            <TableCell align="right">{match.ast}</TableCell>
-                          </TableRow>
-                        )}
-                        {match.hc !== undefined && (
-                          <TableRow>
-                            <TableCell align="left">{match.hc}</TableCell>
-                            <TableCell align="center">Corners</TableCell>
-                            <TableCell align="right">{match.ac}</TableCell>
-                          </TableRow>
-                        )}
-                        {match.hy !== undefined && (
-                          <TableRow>
-                            <TableCell align="left">{match.hy}</TableCell>
-                            <TableCell align="center">Yellow Cards</TableCell>
-                            <TableCell align="right">{match.ay}</TableCell>
-                          </TableRow>
-                        )}
-                        {match.hr !== undefined && (
-                          <TableRow>
-                            <TableCell align="left">{match.hr}</TableCell>
-                            <TableCell align="center">Red Cards</TableCell>
-                            <TableCell align="right">{match.ar}</TableCell>
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                  )}
+                    match.hr) && <MatchInfo match={match} />}
                 </TableContainer>
               </Collapse>
               <Divider variant="middle" />
@@ -229,5 +162,3 @@ const LeagueMatches = (props) => {
     </>
   );
 };
-
-export default LeagueMatches;
