@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { seasons as seasonsArr, seasonIdx } from '../static/seasons';
 import { leagues } from '../static/leagues';
-import { getTableFromMatches } from './helpers';
+import getTableFromMatches from './getTableFromMatches';
 
 const initialState = {
   tables: Array(leagues.length)

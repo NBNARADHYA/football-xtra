@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 
-const LeagueTable = (props) => {
+export default (props) => {
   const { error, isLoaded, table } = props.tableData;
   const style = { position: 'fixed', top: '50%', left: '50%' };
 
@@ -55,5 +55,3 @@ const LeagueTable = (props) => {
     </Table>
   );
 };
-
-export default LeagueTable;
