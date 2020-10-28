@@ -30,6 +30,9 @@ export default (props) => {
     setSearchMatchString('');
     setCollapseId(-1);
     if (props.matchUps.data) setMatches(props.matchUps.data.matches);
+    return () => {
+      setMatches([]);
+    };
   }, [props]);
 
   useEffect(() => {
