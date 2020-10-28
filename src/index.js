@@ -4,8 +4,8 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import reducer from './components/reducer';
-import App from './App';
+import App from './App/';
+import reducer from './Reducer/';
 
 const store = createStore(
   reducer,

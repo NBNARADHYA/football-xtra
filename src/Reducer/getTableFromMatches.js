@@ -1,4 +1,4 @@
-export const getTableFromMatches = (data, error) => {
+export default (data, error) => {
   const clubToIndexMap = {};
 
   const initialRow = {

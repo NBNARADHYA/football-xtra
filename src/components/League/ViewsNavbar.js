@@ -7,8 +7,8 @@ import {
   FormControl,
   InputLabel,
 } from '@material-ui/core';
-import { views } from '../static/views';
-import { seasons } from '../static/seasons';
+import { views } from '../../static/views';
+import { seasons } from '../../static/seasons';
 
 const ViewsNavbar = (props) => {
   const viewsTabs = views.map((view) => {
