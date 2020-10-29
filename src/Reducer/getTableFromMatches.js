@@ -1,4 +1,4 @@
-export default (data, error) => {
+const getTableFromMatches = (data, error) => {
   const clubToIndexMap = {};
 
   const initialRow = {
@@ -80,3 +80,5 @@ export default (data, error) => {
   });
   return table;
 };
+
+export default getTableFromMatches;

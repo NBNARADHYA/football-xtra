@@ -7,7 +7,7 @@ import {
   TableCell,
 } from '@material-ui/core';
 
-export default ({
+const MatchInfo = ({
   match: { hometeam, awayteam, hs, aws, hst, ast, hc, ac, hy, ay, hr, ar },
 }) => {
   return (
@@ -59,3 +59,5 @@ export default ({
     </Table>
   );
 };
+
+export default MatchInfo;
