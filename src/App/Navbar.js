@@ -14,7 +14,7 @@ const Navbar = () => {
           style={{ marginRight: 5 }}
           key={leagueIdx}
           value={leagueIdx}
-          icon={<img src={league.logo} height="55" alt={league.name} />}
+          icon={<img src={league.logo} height="60" alt={league.name} />}
           component={Link}
           to={`/league/${leagueIdx}`}
         />
