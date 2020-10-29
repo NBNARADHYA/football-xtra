@@ -15,7 +15,7 @@ import { Waypoint } from 'react-waypoint';
 import MatchInfo from './MatchInfo';
 import getDate from './getDate';
 
-export default (props) => {
+const Matches = (props) => {
   const { error, loading, data } = props.matchUps;
 
   const [matchIndex, setMatchIndex] = useState([0, 14]);
@@ -165,3 +165,5 @@ export default (props) => {
     </>
   );
 };
+
+export default Matches;

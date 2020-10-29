@@ -1,6 +1,6 @@
 import { weekDays } from '../../../static/weekDays';
 
-export default (date, time) => {
+const getDate = (date, time) => {
   const d = new Date(Number(date));
   let year = d.getFullYear() % 100;
   let month = d.getMonth();
@@ -17,3 +17,5 @@ export default (date, time) => {
   }
   return dateOutput;
 };
+
+export default getDate;

@@ -1,10 +1,12 @@
 import React from 'react';
 import { leagues } from '../../static/leagues';
 
-export default (props) => {
+const TopScorers = (props) => {
   return (
     <div>
       {leagues[props.leagueIdx].name} Top Scorers, Season: {props.season}
     </div>
   );
 };
+
+export default TopScorers;

@@ -10,13 +10,14 @@ const Navbar = () => {
   const leagueTabs = useMemo(() => {
     return leagues.map((league, leagueIdx) => {
       return (
-        <Link key={leagueIdx} to={`/league/${leagueIdx}`}>
-          <Tab
-            style={{ marginRight: 5 }}
-            value={leagueIdx}
-            icon={<img src={league.logo} height="55" alt={league.name} />}
-          />
-        </Link>
+        <Tab
+          style={{ marginRight: 5 }}
+          key={leagueIdx}
+          value={leagueIdx}
+          icon={<img src={league.logo} height="55" alt={league.name} />}
+          component={Link}
+          to={`/league/${leagueIdx}`}
+        />
       );
     });
   }, []);
